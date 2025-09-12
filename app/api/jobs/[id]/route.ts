@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getJob } from "../../../../lib/job-storage"
+import { getJob } from "../../../../lib/job-manager"
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {

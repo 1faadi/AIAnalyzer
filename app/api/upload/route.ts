@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { generateJobId, setJob, type JobData } from "../../../lib/job-storage"
+import { createJob } from "../../../lib/job-manager"
 
 // In-memory storage for jobs (in production, use a database)
 // const jobs = new Map<
@@ -45,27 +45,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "File too large (max 100MB)" }, { status: 400 })
     }
 
-    // Generate unique job ID
-    const jobId = generateJobId()
+    // Create new job
+    const jobId = createJob(file.name)
     console.log("[v0] Generated job ID:", jobId)
 
-    // Store video data in memory
+    // Store video data in memory (for processing)
     const videoData = await file.arrayBuffer()
     console.log("[v0] Video data loaded, size:", videoData.byteLength)
-
-    // Create job metadata
-    const jobData: JobData = {
-      id: jobId,
-      filename: file.name,
-      size: file.size,
-      uploadedAt: new Date().toISOString(),
-      status: "uploaded",
-      videoData,
-    }
-
-    // Store in memory
-    setJob(jobId, jobData)
-    console.log("[v0] Job stored successfully")
 
     return NextResponse.json({
       success: true,

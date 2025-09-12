@@ -79,3 +79,41 @@ export function getAllJobs(): JobStatus[] {
 export function deleteJob(id: string): boolean {
   return jobs.delete(id)
 }
+
+export async function uploadAndStartProcessing(file: File): Promise<string> {
+  // Create a new job
+  const jobId = createJob(file.name)
+  
+  // Update status to processing
+  updateJobStatus(jobId, 'processing')
+  
+  try {
+    // Create FormData for file upload
+    const formData = new FormData()
+    formData.append('file', file)
+    
+    // Upload and start processing
+    const response = await fetch(`/api/process/${jobId}`, {
+      method: 'POST',
+      body: formData
+    })
+    
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.statusText}`)
+    }
+    
+    const result = await response.json()
+    
+    if (result.success) {
+      // Update job with initial results (frames extracted)
+      updateJobStatus(jobId, 'processing', result.results)
+      return jobId
+    } else {
+      throw new Error(result.error || 'Processing failed')
+    }
+  } catch (error) {
+    // Update job status to failed
+    updateJobStatus(jobId, 'failed')
+    throw error
+  }
+}

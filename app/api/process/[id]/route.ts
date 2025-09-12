@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getJob, updateJobStatus } from "../../../../lib/job-storage"
+import { getJob, updateJobStatus } from "../../../../lib/job-manager"
 
 interface ProcessingResults {
   incorrectParking: boolean
