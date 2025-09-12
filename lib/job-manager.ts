@@ -29,9 +29,50 @@ export interface JobStatus {
   }
 }
 
-// In-memory storage for demo purposes
-// In production, use a proper database
-const jobs = new Map<string, JobStatus>()
+// Singleton pattern for job storage to ensure sharing across API routes
+class JobStorage {
+  private static instance: JobStorage
+  private jobs = new Map<string, JobStatus>()
+
+  static getInstance(): JobStorage {
+    if (!JobStorage.instance) {
+      JobStorage.instance = new JobStorage()
+    }
+    return JobStorage.instance
+  }
+
+  setJob(id: string, job: JobStatus): void {
+    this.jobs.set(id, job)
+    console.log(`[JobStorage] Set job ${id}, total jobs: ${this.jobs.size}`)
+  }
+
+  getJob(id: string): JobStatus | null {
+    console.log(`[JobStorage] Getting job ${id}, total jobs: ${this.jobs.size}`)
+    const job = this.jobs.get(id) || null
+    console.log(`[JobStorage] Job ${id} found: ${job ? 'yes' : 'no'}`)
+    if (job) {
+      console.log(`[JobStorage] Job ${id} status: ${job.status}`)
+    }
+    return job
+  }
+
+  deleteJob(id: string): boolean {
+    const result = this.jobs.delete(id)
+    console.log(`[JobStorage] Deleted job ${id}, success: ${result}, remaining jobs: ${this.jobs.size}`)
+    return result
+  }
+
+  getAllJobs(): JobStatus[] {
+    return Array.from(this.jobs.values())
+  }
+
+  size(): number {
+    return this.jobs.size
+  }
+}
+
+// Get singleton instance
+const jobStorage = JobStorage.getInstance()
 
 export function createJob(filename: string): string {
   const id = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -41,12 +82,12 @@ export function createJob(filename: string): string {
     filename,
     uploadedAt: new Date().toISOString()
   }
-  jobs.set(id, job)
+  jobStorage.setJob(id, job)
   return id
 }
 
 export function getJob(id: string): JobStatus | null {
-  return jobs.get(id) || null
+  return jobStorage.getJob(id)
 }
 
 export function updateJobStatus(
@@ -54,13 +95,16 @@ export function updateJobStatus(
   status: JobStatus['status'], 
   results?: JobStatus['results']
 ): void {
-  const job = jobs.get(id)
+  const job = jobStorage.getJob(id)
   if (job) {
     job.status = status
     if (results) {
       job.results = results
     }
-    jobs.set(id, job)
+    jobStorage.setJob(id, job)
+    console.log(`[job-manager] Updated job ${id} status to ${status}`)
+  } else {
+    console.error(`[job-manager] Cannot update job ${id} - not found`)
   }
 }
 
@@ -73,11 +117,11 @@ export async function getJobStatus(id: string): Promise<JobStatus> {
 }
 
 export function getAllJobs(): JobStatus[] {
-  return Array.from(jobs.values())
+  return jobStorage.getAllJobs()
 }
 
 export function deleteJob(id: string): boolean {
-  return jobs.delete(id)
+  return jobStorage.deleteJob(id)
 }
 
 export async function uploadAndStartProcessing(file: File): Promise<string> {
