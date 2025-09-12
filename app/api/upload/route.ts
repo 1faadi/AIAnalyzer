@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     fs.writeFileSync(tempVideoPath, Buffer.from(videoData))
     console.log("[v0] Video saved to:", tempVideoPath)
 
-    // Set status to pending, processing will start when user navigates to processing page
+    // Set status to pending - processing will start when user clicks the button
     updateJobStatus(jobId, 'pending')
     console.log("[v0] Video uploaded successfully, ready for processing")
 

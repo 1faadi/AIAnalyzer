@@ -29,26 +29,35 @@ export interface JobStatus {
   }
 }
 
-// Singleton pattern for job storage to ensure sharing across API routes
-class JobStorage {
-  private static instance: JobStorage
-  private jobs = new Map<string, JobStatus>()
+// Global job storage that persists across Next.js API route hot reloads
+declare global {
+  var globalJobStorage: Map<string, JobStatus> | undefined
+}
 
-  static getInstance(): JobStorage {
-    if (!JobStorage.instance) {
-      JobStorage.instance = new JobStorage()
+// Initialize global storage if it doesn't exist
+if (!global.globalJobStorage) {
+  global.globalJobStorage = new Map<string, JobStatus>()
+}
+
+// Simple job storage using Node.js global object
+class JobStorage {
+  private getStorage(): Map<string, JobStatus> {
+    if (!global.globalJobStorage) {
+      global.globalJobStorage = new Map<string, JobStatus>()
     }
-    return JobStorage.instance
+    return global.globalJobStorage
   }
 
   setJob(id: string, job: JobStatus): void {
-    this.jobs.set(id, job)
-    console.log(`[JobStorage] Set job ${id}, total jobs: ${this.jobs.size}`)
+    const storage = this.getStorage()
+    storage.set(id, job)
+    console.log(`[JobStorage] Set job ${id}, total jobs: ${storage.size}`)
   }
 
   getJob(id: string): JobStatus | null {
-    console.log(`[JobStorage] Getting job ${id}, total jobs: ${this.jobs.size}`)
-    const job = this.jobs.get(id) || null
+    const storage = this.getStorage()
+    console.log(`[JobStorage] Getting job ${id}, total jobs: ${storage.size}`)
+    const job = storage.get(id) || null
     console.log(`[JobStorage] Job ${id} found: ${job ? 'yes' : 'no'}`)
     if (job) {
       console.log(`[JobStorage] Job ${id} status: ${job.status}`)
@@ -57,22 +66,25 @@ class JobStorage {
   }
 
   deleteJob(id: string): boolean {
-    const result = this.jobs.delete(id)
-    console.log(`[JobStorage] Deleted job ${id}, success: ${result}, remaining jobs: ${this.jobs.size}`)
+    const storage = this.getStorage()
+    const result = storage.delete(id)
+    console.log(`[JobStorage] Deleted job ${id}, success: ${result}, remaining jobs: ${storage.size}`)
     return result
   }
 
   getAllJobs(): JobStatus[] {
-    return Array.from(this.jobs.values())
+    const storage = this.getStorage()
+    return Array.from(storage.values())
   }
 
   size(): number {
-    return this.jobs.size
+    const storage = this.getStorage()
+    return storage.size
   }
 }
 
-// Get singleton instance
-const jobStorage = JobStorage.getInstance()
+// Create singleton instance
+const jobStorage = new JobStorage()
 
 export function createJob(filename: string): string {
   const id = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -169,7 +181,7 @@ export async function pollJobStatus(
       const job = await response.json()
       onUpdate(job)
       
-      // If job is still pending, start processing
+      // If job is pending, start processing
       if (job.status === 'pending') {
         console.log('Starting processing for job:', jobId)
         fetch(`/api/process/${jobId}`, { method: 'POST' })

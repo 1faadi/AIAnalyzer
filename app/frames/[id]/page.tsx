@@ -6,7 +6,7 @@ import { Shield, Brain, CheckCircle, XCircle, ArrowLeft, Play, Image as ImageIco
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { getJobStatus, type JobStatus } from "@/lib/job-manager"
+import { type JobStatus } from "@/lib/job-manager"
 
 export default function FramesPage() {
   const params = useParams()
@@ -21,7 +21,12 @@ export default function FramesPage() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const status = await getJobStatus(jobId)
+        const response = await fetch(`/api/jobs/${jobId}`)
+        if (!response.ok) {
+          throw new Error(`Failed to fetch job: ${response.statusText}`)
+        }
+        
+        const status = await response.json()
         setJobStatus(status)
       } catch (err) {
         setError("Failed to load job data")

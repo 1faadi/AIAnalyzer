@@ -6,7 +6,7 @@ import { Shield, AlertTriangle, CheckCircle, XCircle, ArrowLeft, Download } from
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { getJobStatus, type JobStatus } from "@/lib/job-manager"
+import { type JobStatus } from "@/lib/job-manager"
 import { AnnotatedImage } from "@/components/annotated-image"
 
 export default function ResultsPage() {
@@ -21,8 +21,19 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const status = await getJobStatus(jobId)
+        const response = await fetch(`/api/jobs/${jobId}`)
+        if (!response.ok) {
+          throw new Error(`Failed to fetch job: ${response.statusText}`)
+        }
+        
+        const status = await response.json()
         setJobStatus(status)
+        
+        // If job is still processing, redirect to processing page
+        if (status.status === 'processing' || status.status === 'pending') {
+          router.push(`/processing/${jobId}`)
+          return
+        }
         
         // If frames are extracted but no AI analysis done yet, redirect to frames page
         if (status.results?.frames && 
