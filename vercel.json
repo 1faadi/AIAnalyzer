@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "functions": {
+    "app/api/upload/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/process/[id]/route.ts": {
+      "maxDuration": 900
+    },
+    "app/api/webhook/[id]/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "PYTHON_SERVICE_URL": "https://warehouse-safety-python.onrender.com"
+  }
+}

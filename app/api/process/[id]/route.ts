@@ -1,8 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getJob, updateJobStatus } from "../../../../lib/job-manager"
-import { spawn } from "child_process"
-import path from "path"
-import fs from "fs"
 
 interface ProcessingResults {
   incorrectParking: boolean
@@ -29,93 +26,69 @@ interface ProcessingResults {
   mitigationStrategies?: any[]
 }
 
-async function processVideoWithAI(videoPath: string, jobId: string): Promise<ProcessingResults> {
+async function processVideoWithExternalService(videoUrl: string, jobId: string): Promise<ProcessingResults> {
   try {
-    console.log("[v0] Starting enhanced video processing pipeline...")
-    console.log("[v0] Video path:", videoPath)
+    console.log("[v0] Starting external video processing...")
+    console.log("[v0] Video URL:", videoUrl)
     
-    // Step 1: Extract frames using the enhanced OpenCV script
-    console.log("[v0] Step 1: Extracting frames with similarity filtering...")
-    const framesDir = path.join(process.cwd(), "public", "temp")
-    const extractResult = await runPythonScript("extract_frames_opencv.py", [videoPath, framesDir, "0.80"])
+    const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || "https://warehouse-safety-python.onrender.com"
+    const webhookUrl = `${process.env.VERCEL_URL || 'http://localhost:3000'}/api/webhook/${jobId}`
     
-    if (!extractResult.success) {
-      throw new Error(`Frame extraction failed: ${extractResult.error}`)
+    console.log("[v0] Calling Python service at:", pythonServiceUrl)
+    
+    const response = await fetch(`${pythonServiceUrl}/analyze`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        videoUrl: videoUrl,
+        jobId: jobId,
+        webhookUrl: webhookUrl
+      }),
+      // Render free tier allows up to 15 minutes
+      signal: AbortSignal.timeout(900000) // 15 minutes
+    })
+    
+    if (!response.ok) {
+      throw new Error(`Python service failed: ${response.status} ${response.statusText}`)
     }
     
-    console.log("[v0] Frames extracted successfully:", extractResult.total_frames_extracted)
+    const result = await response.json()
     
-    // Step 2: Run AI analysis using the enhanced script
-    console.log("[v0] Step 2: Running enhanced AI analysis with YOLO...")
-    const apiKey = process.env.OPENROUTER_API_KEY || ""
-    if (!apiKey) {
-      console.log("[v0] Warning: No OpenRouter API key found, using mock analysis")
-      return createMockResults(extractResult.frames || [])
-    }
+    console.log("[v0] External processing completed successfully")
     
-    const analysisResult = await runPythonScript("analyze_frames_openrouter.py", [framesDir, apiKey, jobId])
-    
-    if (!analysisResult.success) {
-      console.log("[v0] AI analysis failed, using extracted frames only:", analysisResult.error)
-      return createMockResults(extractResult.frames || [])
-    }
-    
-    console.log("[v0] Enhanced analysis completed successfully")
-    
-    // Return the enhanced results
-    return {
-      incorrectParking: analysisResult.analysis?.incorrectParking || false,
-      wasteMaterial: analysisResult.analysis?.wasteMaterial || false,
-      explanation: analysisResult.analysis?.explanation || "Analysis completed successfully",
-      frames: analysisResult.analysis?.frames || [],
-      frameDetails: analysisResult.analysis?.frameDetails || [],
-      mitigationStrategies: analysisResult.analysis?.mitigationStrategies || []
+    return result.results || {
+      incorrectParking: false,
+      wasteMaterial: false,
+      explanation: "External processing completed",
+      frames: [],
+      frameDetails: [],
+      mitigationStrategies: []
     }
     
   } catch (error) {
-    console.error("[v0] Video processing error:", error)
+    console.error("[v0] External processing error:", error)
     throw error
   }
 }
 
-// Helper function to run Python scripts
-async function runPythonScript(scriptName: string, args: string[]): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const scriptPath = path.join(process.cwd(), "scripts", scriptName)
-    const pythonProcess = spawn("python", [scriptPath, ...args])
+// Helper function to upload video to cloud storage
+async function uploadVideoToCloud(videoData: Buffer, filename: string, jobId: string): Promise<string> {
+  try {
+    // For now, we'll use a simple approach - in production, use proper cloud storage
+    const tempFilename = `${jobId}_${filename}`
+    const videoUrl = `${process.env.VERCEL_URL || 'http://localhost:3000'}/temp/${tempFilename}`
     
-    let output = ""
-    let errorOutput = ""
+    // Note: In production, upload to AWS S3, Cloudinary, or similar
+    // For demo, we'll pass the local URL (this won't work in production)
+    console.log("[v0] Video URL for processing:", videoUrl)
     
-    pythonProcess.stdout.on("data", (data) => {
-      output += data.toString()
-    })
-    
-    pythonProcess.stderr.on("data", (data) => {
-      errorOutput += data.toString()
-    })
-    
-    pythonProcess.on("close", (code) => {
-      if (code !== 0) {
-        console.error(`[v0] Python script failed with code ${code}:`, errorOutput)
-        reject(new Error(`Python script failed: ${errorOutput}`))
-        return
-      }
-      
-      try {
-        const result = JSON.parse(output)
-        resolve(result)
-      } catch (parseError) {
-        console.error(`[v0] Failed to parse Python output:`, output)
-        reject(new Error(`Failed to parse Python script output: ${parseError}`))
-      }
-    })
-    
-    pythonProcess.on("error", (error) => {
-      console.error(`[v0] Python process error:`, error)
-      reject(error)
-    })
-  })
+    return videoUrl
+  } catch (error) {
+    console.error("[v0] Video upload failed:", error)
+    throw error
+  }
 }
 
 // Helper function to create mock results when AI analysis fails
@@ -151,18 +124,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     console.log("[v0] Job status updated to processing")
 
     try {
-      // Find the video file in the temp directory
-      const tempDir = path.join(process.cwd(), "public", "temp")
-      const videoFiles = fs.readdirSync(tempDir).filter(f => f.includes(jobId) && f.includes(job.filename.replace(/[^a-zA-Z0-9.]/g, '_')))
-      
-      if (videoFiles.length === 0) {
-        throw new Error("Video file not found in temp directory")
-      }
-      
-      const videoPath = path.join(tempDir, videoFiles[0])
-      console.log("[v0] Found video file:", videoPath)
+      // Get video URL for external processing
+      const videoUrl = `${process.env.VERCEL_URL || 'http://localhost:3000'}/temp/${jobId}_${job.filename.replace(/[^a-zA-Z0-9.]/g, '_')}`
+      console.log("[v0] Processing video via external service:", videoUrl)
 
-      const results = await processVideoWithAI(videoPath, jobId)
+      const results = await processVideoWithExternalService(videoUrl, jobId)
 
       const formattedResults = {
         incorrectParking: results.incorrectParking,
