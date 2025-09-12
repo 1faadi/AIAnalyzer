@@ -37,7 +37,7 @@ async function processVideoWithAI(videoPath: string, jobId: string): Promise<Pro
     // Step 1: Extract frames using the enhanced OpenCV script
     console.log("[v0] Step 1: Extracting frames with similarity filtering...")
     const framesDir = path.join(process.cwd(), "public", "temp")
-    const extractResult = await runPythonScript("extract_frames_opencv.py", [videoPath, framesDir, "0.80"])
+    const extractResult = await runPythonScript("extract_frames_opencv.py", [videoPath, framesDir, "0.70"])
     
     if (!extractResult.success) {
       throw new Error(`Frame extraction failed: ${extractResult.error}`)

@@ -15,9 +15,72 @@ except ImportError:
     print("Warning: scikit-image not available, using basic similarity detection", file=sys.stderr)
     HAS_SCIKIT_IMAGE = False
 
+def detect_motion(frame1, frame2, threshold=1000):
+    """
+    Detect significant motion between two frames
+    Returns motion score (higher = more motion)
+    """
+    try:
+        if frame1 is None or frame2 is None:
+            return 0
+        
+        # Convert to grayscale
+        gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY) if len(frame1.shape) == 3 else frame1
+        gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY) if len(frame2.shape) == 3 else frame2
+        
+        # Resize for faster processing
+        gray1 = cv2.resize(gray1, (320, 240))
+        gray2 = cv2.resize(gray2, (320, 240))
+        
+        # Apply Gaussian blur to reduce noise
+        gray1 = cv2.GaussianBlur(gray1, (21, 21), 0)
+        gray2 = cv2.GaussianBlur(gray2, (21, 21), 0)
+        
+        # Calculate absolute difference
+        frame_diff = cv2.absdiff(gray1, gray2)
+        
+        # Threshold the difference
+        _, thresh = cv2.threshold(frame_diff, 25, 255, cv2.THRESH_BINARY)
+        
+        # Find contours
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Calculate total motion area
+        motion_area = sum(cv2.contourArea(contour) for contour in contours if cv2.contourArea(contour) > 50)
+        
+        return motion_area
+        
+    except Exception as e:
+        print(f"Motion detection error: {e}", file=sys.stderr)
+        return 0
+
+def is_frame_quality_acceptable(frame, brightness_threshold=30, blur_threshold=50):
+    """
+    Check if frame quality is acceptable for analysis
+    """
+    try:
+        # Convert to grayscale
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
+        
+        # Check brightness (avoid very dark frames)
+        mean_brightness = np.mean(gray)
+        if mean_brightness < brightness_threshold:
+            return False
+        
+        # Check blur (using Laplacian variance)
+        blur_score = cv2.Laplacian(gray, cv2.CV_64F).var()
+        if blur_score < blur_threshold:
+            return False
+        
+        return True
+        
+    except Exception as e:
+        print(f"Quality check error: {e}", file=sys.stderr)
+        return True  # Default to accepting frame if check fails
+
 def calculate_frame_similarity(frame1, frame2, threshold=0.85):
     """
-    Calculate similarity between two frames using multiple methods
+    Enhanced similarity calculation with motion awareness
     Returns True if frames are similar (above threshold)
     """
     try:
@@ -65,7 +128,7 @@ def calculate_frame_similarity(frame1, frame2, threshold=0.85):
         print(f"Error calculating frame similarity: {e}", file=sys.stderr)
         return False
 
-def extract_frames_with_opencv(video_path, output_dir, frame_interval=1, similarity_threshold=0.80):
+def extract_frames_with_opencv(video_path, output_dir, frame_interval=1, similarity_threshold=0.70):
     """
     Extract frames from video using OpenCV with real-time similarity checking
     """
@@ -109,14 +172,38 @@ def extract_frames_with_opencv(video_path, output_dir, frame_interval=1, similar
             # Resize frame to standard size
             frame = cv2.resize(frame, (640, 480))
             
-            # Check similarity with last saved frame
+            # Relaxed quality check - only skip extremely poor frames
+            if not is_frame_quality_acceptable(frame, brightness_threshold=15, blur_threshold=25):
+                print(f"Extremely poor quality frame at {current_time:.1f}s - skipping", file=sys.stderr)
+                current_time += frame_interval
+                continue
+            
+            # Intensive analysis mode - more selective but comprehensive
             should_save = True
             if last_saved_frame is not None:
-                is_similar = calculate_frame_similarity(last_saved_frame, frame, similarity_threshold)
-                if is_similar:
-                    should_save = False
-                    skipped_frames += 1
-                    print(f"Frame at {current_time:.1f}s is similar to previous - skipping (total skipped: {skipped_frames})", file=sys.stderr)
+                # Check motion with lower threshold for more sensitivity
+                motion_score = detect_motion(last_saved_frame, frame)
+                motion_threshold = 800  # Lower threshold = more sensitive to motion
+                
+                if motion_score > motion_threshold:
+                    # Motion detected - always save
+                    should_save = True
+                    print(f"Motion detected ({motion_score}), saving frame at {current_time:.1f}s", file=sys.stderr)
+                else:
+                    # Check similarity with stricter threshold (save more frames)
+                    is_similar = calculate_frame_similarity(last_saved_frame, frame, similarity_threshold + 0.05)
+                    if is_similar:
+                        # Even for similar frames, save every 3rd one for comprehensive coverage
+                        if skipped_frames % 3 == 2:  # Save every 3rd similar frame
+                            should_save = True
+                            print(f"Periodic save of similar frame at {current_time:.1f}s for comprehensive analysis", file=sys.stderr)
+                        else:
+                            should_save = False
+                            skipped_frames += 1
+                            print(f"Frame at {current_time:.1f}s is similar - skipping {skipped_frames}/3", file=sys.stderr)
+                    else:
+                        # Different frame - definitely save
+                        should_save = True
             
             if should_save:
                 # Create filename
@@ -187,7 +274,7 @@ if __name__ == "__main__":
     
     video_path = sys.argv[1]
     output_dir = sys.argv[2]
-    similarity_threshold = float(sys.argv[3]) if len(sys.argv) > 3 else 0.80
+    similarity_threshold = float(sys.argv[3]) if len(sys.argv) > 3 else 0.70
     
     # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)
