@@ -81,19 +81,13 @@ export function deleteJob(id: string): boolean {
 }
 
 export async function uploadAndStartProcessing(file: File): Promise<string> {
-  // Create a new job
-  const jobId = createJob(file.name)
-  
-  // Update status to processing
-  updateJobStatus(jobId, 'processing')
-  
   try {
     // Create FormData for file upload
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('video', file)
     
-    // Upload and start processing
-    const response = await fetch(`/api/process/${jobId}`, {
+    // Upload file via upload API
+    const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData
     })
@@ -105,15 +99,47 @@ export async function uploadAndStartProcessing(file: File): Promise<string> {
     const result = await response.json()
     
     if (result.success) {
-      // Update job with initial results (frames extracted)
-      updateJobStatus(jobId, 'processing', result.results)
-      return jobId
+      return result.jobId
     } else {
-      throw new Error(result.error || 'Processing failed')
+      throw new Error(result.error || 'Upload failed')
     }
   } catch (error) {
-    // Update job status to failed
-    updateJobStatus(jobId, 'failed')
+    console.error('Upload error:', error)
     throw error
   }
+}
+
+export async function pollJobStatus(
+  jobId: string,
+  onUpdate: (status: JobStatus) => void,
+  interval: number = 2000
+): Promise<void> {
+  const poll = async () => {
+    try {
+      const response = await fetch(`/api/jobs/${jobId}`)
+      if (!response.ok) {
+        throw new Error(`Failed to get job status: ${response.statusText}`)
+      }
+      
+      const job = await response.json()
+      onUpdate(job)
+      
+      // If job is still pending, start processing
+      if (job.status === 'pending') {
+        console.log('Starting processing for job:', jobId)
+        fetch(`/api/process/${jobId}`, { method: 'POST' })
+          .catch(error => console.error('Failed to start processing:', error))
+      }
+      
+      // Continue polling if job is not finished
+      if (job.status === 'pending' || job.status === 'processing') {
+        setTimeout(poll, interval)
+      }
+    } catch (error) {
+      console.error('Polling error:', error)
+      throw error
+    }
+  }
+  
+  await poll()
 }

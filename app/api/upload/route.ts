@@ -35,6 +35,9 @@ export async function POST(request: NextRequest) {
     // Create new job
     const jobId = createJob(file.name)
     console.log("[v0] Generated job ID:", jobId)
+    
+    // Update job status to pending (ready for processing)
+    updateJobStatus(jobId, 'pending')
 
     // Store video data in memory (for processing)
     const videoData = await file.arrayBuffer()
