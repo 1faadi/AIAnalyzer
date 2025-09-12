@@ -75,10 +75,11 @@ export default function HomePage() {
     if (!uploadedFile || typeof uploadedFile === "string") return
 
     setIsProcessing(true)
-    const jobId = uploadedFile.jobId
+    const jobId = (uploadedFile as any).jobId
 
     try {
-      router.push(`/processing/${jobId}`)
+      // Navigate directly to results since processing is already complete
+      router.push(`/results/${jobId}`)
     } catch (error) {
       console.error("Navigation failed:", error)
       setIsProcessing(false)
@@ -202,7 +203,7 @@ export default function HomePage() {
                       disabled={isProcessing}
                       className="bg-primary hover:bg-primary/90"
                     >
-                      {isProcessing ? "Starting Analysis..." : "Start Analysis"}
+                      {isProcessing ? "Loading Results..." : "View Analysis Results"}
                     </Button>
                     <Button
                       variant="outline"

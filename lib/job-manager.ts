@@ -130,7 +130,7 @@ export async function uploadAndStartProcessing(file: File): Promise<string> {
     const formData = new FormData()
     formData.append('video', file)
     
-    // Upload file via upload API
+    // Upload file and process immediately
     const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData
@@ -143,6 +143,7 @@ export async function uploadAndStartProcessing(file: File): Promise<string> {
     const result = await response.json()
     
     if (result.success) {
+      console.log('Upload and processing completed:', result.message)
       return result.jobId
     } else {
       throw new Error(result.error || 'Upload failed')
