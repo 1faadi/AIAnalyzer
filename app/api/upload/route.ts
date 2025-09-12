@@ -1,23 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createJob } from "../../../lib/job-manager"
+import { createJob, getJob, updateJobStatus } from "../../../lib/job-manager"
+import fs from "fs"
+import path from "path"
 
-// In-memory storage for jobs (in production, use a database)
-// const jobs = new Map<
-//   string,
-//   {
-//     id: string
-//     filename: string
-//     size: number
-//     uploadedAt: string
-//     status: string
-//     videoData: ArrayBuffer
-//   }
-// >()
-
-// Simple ID generator (replacing uuid dependency)
-// function generateJobId(): string {
-//   return Date.now().toString(36) + Math.random().toString(36).substr(2)
-// }
+// In-memory storage for video data (in production, use a database or file storage)
+const videoStorage = new Map<string, ArrayBuffer>()
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,11 +39,25 @@ export async function POST(request: NextRequest) {
     // Store video data in memory (for processing)
     const videoData = await file.arrayBuffer()
     console.log("[v0] Video data loaded, size:", videoData.byteLength)
+    
+    // Store video data for processing
+    videoStorage.set(jobId, videoData)
+    
+    // Save video file to public/temp directory for processing
+    const tempDir = path.join(process.cwd(), "public", "temp")
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true })
+    }
+    
+    const tempVideoPath = path.join(tempDir, `video_${jobId}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`)
+    fs.writeFileSync(tempVideoPath, Buffer.from(videoData))
+    console.log("[v0] Video saved to:", tempVideoPath)
 
     return NextResponse.json({
       success: true,
       jobId,
       message: "Video uploaded successfully",
+      tempPath: tempVideoPath
     })
   } catch (error) {
     console.error("[v0] Upload error:", error)
@@ -80,5 +81,5 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Export jobs for other API routes to access
-// export { jobs }
+// Export video storage for other API routes to access
+export { videoStorage }
