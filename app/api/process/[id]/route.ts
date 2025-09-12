@@ -67,7 +67,9 @@ async function processVideoWithAI(videoPath: string, jobId: string): Promise<Pro
       incorrectParking: analysisResult.analysis?.incorrectParking || false,
       wasteMaterial: analysisResult.analysis?.wasteMaterial || false,
       explanation: analysisResult.analysis?.explanation || "Analysis completed successfully",
-      frames: analysisResult.analysis?.frames || []
+      frames: analysisResult.analysis?.frames || [],
+      frameDetails: analysisResult.analysis?.frameDetails || [],
+      mitigationStrategies: analysisResult.analysis?.mitigationStrategies || []
     }
     
   } catch (error) {
@@ -126,7 +128,9 @@ function createMockResults(frames: any[]): ProcessingResults {
       time: frame.time || "00:00",
       imageUrl: frame.imageUrl || `/temp/${frame.filename}`,
       boundingBoxes: []
-    }))
+    })),
+    frameDetails: [],
+    mitigationStrategies: []
   }
 }
 
