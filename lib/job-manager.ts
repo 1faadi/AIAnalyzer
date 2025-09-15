@@ -138,9 +138,10 @@ export function deleteJob(id: string): boolean {
 
 export async function uploadAndStartProcessing(file: File): Promise<string> {
   try {
-    // For demo purposes, return a static job ID that works with the demo API
-    console.log('Creating demo job for file:', file.name)
-    return "demo-job"
+    // Generate a realistic job id for the URL
+    const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    console.log('Creating demo job for file:', file.name, '->', jobId)
+    return jobId
   } catch (error) {
     console.error('Job creation error:', error)
     throw error

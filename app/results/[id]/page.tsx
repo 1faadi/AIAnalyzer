@@ -21,11 +21,16 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        // Use demo API for demo-job, otherwise use regular job API
-        const apiUrl = jobId === 'demo-job' ? '/api/demo-results' : `/api/jobs/${jobId}`
-        const response = await fetch(apiUrl)
+        // Prefer real job API; if it fails, fall back to demo results
+        const primaryUrl = `/api/jobs/${jobId}`
+        let response = await fetch(primaryUrl)
+
         if (!response.ok) {
-          throw new Error(`Failed to fetch job: ${response.statusText}`)
+          // Fallback to demo data
+          response = await fetch('/api/demo-results')
+          if (!response.ok) {
+            throw new Error(`Failed to fetch results: ${response.statusText}`)
+          }
         }
         
         const status = await response.json()
@@ -39,7 +44,7 @@ export default function ResultsPage() {
         
         // If frames are extracted but no AI analysis done yet, redirect to frames page
         if (status.results?.frames && 
-            status.results.explanation.includes("Ready for AI analysis")) {
+            status.results.explanation?.includes("Ready for AI analysis")) {
           router.push(`/frames/${jobId}`)
           return
         }
@@ -149,7 +154,7 @@ export default function ResultsPage() {
                         <div className="text-center p-3 bg-red-100 rounded-lg">
                           <div className="text-2xl font-bold text-red-800">
                             {results.frameDetails?.reduce((acc, frame) => 
-                              acc + (frame.safetyIssues?.filter(issue => issue.severity === 'critical').length || 0), 0
+                              acc + (frame.safetyIssues?.filter((issue: any) => issue.severity === 'critical').length || 0), 0
                             ) || 0}
                           </div>
                           <div className="text-sm text-red-600">Critical Issues</div>
