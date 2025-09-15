@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const staticResults = {
       id: "demo-job",
       status: "completed",
-      filename: "warehouse-demo.mp4",
+      filename: "warehouse-video.mp4",
       uploadedAt: new Date().toISOString(),
       results: {
         incorrectParking: true,
