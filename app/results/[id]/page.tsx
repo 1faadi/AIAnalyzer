@@ -21,7 +21,9 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch(`/api/jobs/${jobId}`)
+        // Use demo API for demo-job, otherwise use regular job API
+        const apiUrl = jobId === 'demo-job' ? '/api/demo-results' : `/api/jobs/${jobId}`
+        const response = await fetch(apiUrl)
         if (!response.ok) {
           throw new Error(`Failed to fetch job: ${response.statusText}`)
         }
