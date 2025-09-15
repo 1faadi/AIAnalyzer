@@ -78,8 +78,8 @@ export default function HomePage() {
     const jobId = (uploadedFile as any).jobId
 
     try {
-      // Navigate directly to results since we have static data
-      router.push(`/results/${jobId}`)
+      // Show processing page (2–3s), then it redirects to results automatically
+      router.push(`/processing/${jobId}`)
     } catch (error) {
       console.error("Navigation failed:", error)
       setIsProcessing(false)

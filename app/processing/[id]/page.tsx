@@ -8,68 +8,53 @@ import { Shield, Upload, Brain, CheckCircle, XCircle, AlertTriangle } from "luci
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
-import { pollJobStatus, type JobStatus } from "@/lib/job-manager"
 
 export default function ProcessingPage() {
   const params = useParams()
   const router = useRouter()
   const jobId = params.id as string
 
-  const [jobStatus, setJobStatus] = useState<JobStatus | null>(null)
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(10)
   const [currentStep, setCurrentStep] = useState("Initializing...")
   const [error, setError] = useState<string | null>(null)
 
+  // Simulate 2–3s processing with staged steps then redirect to results
   useEffect(() => {
     if (!jobId) return
 
-    const startPolling = async () => {
-      try {
-        await pollJobStatus(
-          jobId,
-          (status) => {
-            setJobStatus(status)
-            updateProgress(status.status)
-          },
-          2000, // Poll every 2 seconds
-        )
-      } catch (err) {
-        console.error("Polling error:", err)
-        setError("Failed to track job progress")
-      }
-    }
+    try {
+      setCurrentStep("Initializing...")
+      setProgress(10)
 
-    startPolling()
-  }, [jobId])
+      const timers: NodeJS.Timeout[] = []
 
-  const updateProgress = (status: JobStatus["status"]) => {
-    switch (status) {
-      case "uploaded":
-        setProgress(20)
+      timers.push(setTimeout(() => {
         setCurrentStep("Extracting video frames...")
-        break
-      case "processing":
-        setProgress(60)
+        setProgress(35)
+      }, 500))
+
+      timers.push(setTimeout(() => {
         setCurrentStep("Analyzing frames with AI...")
-        break
-      case "completed":
-        setProgress(100)
+        setProgress(75)
+      }, 1200))
+
+      timers.push(setTimeout(() => {
         setCurrentStep("Analysis complete!")
-        // Redirect to results after a short delay
-        setTimeout(() => {
-          router.push(`/results/${jobId}`)
-        }, 2000)
-        break
-      case "error":
-        setProgress(0)
-        setCurrentStep("Processing failed")
-        setError("An error occurred during processing")
-        break
-      default:
-        setProgress(10)
-        setCurrentStep("Initializing...")
+        setProgress(100)
+      }, 2000))
+
+      timers.push(setTimeout(() => {
+        router.push(`/results/${jobId}`)
+      }, 2400))
+
+      return () => {
+        timers.forEach(clearTimeout)
+      }
+    } catch (e) {
+      console.error("Processing simulation error:", e)
+      setError("An error occurred during processing")
     }
-  }
+  }, [jobId, router])
 
   if (error) {
     return (
@@ -116,7 +101,7 @@ export default function ProcessingPage() {
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-2xl">Analyzing Your Video</CardTitle>
-              <CardDescription>{jobStatus?.filename && `Processing: ${jobStatus.filename}`}</CardDescription>
+              <CardDescription>Preparing your safety analysis</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Progress Circle */}
