@@ -127,56 +127,40 @@ export default function ResultsPage() {
             <>
               {/* Priority Actions Summary */}
               {(() => {
-                const allHazards = results.frames?.flatMap(frame => frame.boundingBoxes || []) || []
-                const criticalHazards = allHazards.filter(h => h.severity === 'critical')
-                const urgentActions = allHazards.filter(h => h.immediate_action)
-                const totalHazards = allHazards.length
+                const hasSafetyIssues = results.frameDetails?.some(frame => 
+                  frame.safetyIssues && frame.safetyIssues.length > 0
+                ) || false
 
-                return totalHazards > 0 ? (
+                return hasSafetyIssues ? (
                   <Card className="border-2 border-orange-200 bg-orange-50">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-orange-800">
                         <AlertTriangle className="h-5 w-5" />
-                        Priority Safety Actions Required
+                        Safety Issues Detected
                       </CardTitle>
                       <CardDescription className="text-orange-700">
-                        Immediate attention needed for detected safety hazards
+                        Review the detailed analysis below for specific safety concerns
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="text-center p-3 bg-red-100 rounded-lg">
-                          <div className="text-2xl font-bold text-red-800">{criticalHazards.length}</div>
-                          <div className="text-sm text-red-600">Critical Hazards</div>
-                        </div>
-                        <div className="text-center p-3 bg-yellow-100 rounded-lg">
-                          <div className="text-2xl font-bold text-yellow-800">{urgentActions.length}</div>
-                          <div className="text-sm text-yellow-600">Urgent Actions</div>
+                          <div className="text-2xl font-bold text-red-800">
+                            {results.frameDetails?.reduce((acc, frame) => 
+                              acc + (frame.safetyIssues?.filter(issue => issue.severity === 'critical').length || 0), 0
+                            ) || 0}
+                          </div>
+                          <div className="text-sm text-red-600">Critical Issues</div>
                         </div>
                         <div className="text-center p-3 bg-blue-100 rounded-lg">
-                          <div className="text-2xl font-bold text-blue-800">{totalHazards}</div>
+                          <div className="text-2xl font-bold text-blue-800">
+                            {results.frameDetails?.reduce((acc, frame) => 
+                              acc + (frame.safetyIssues?.length || 0), 0
+                            ) || 0}
+                          </div>
                           <div className="text-sm text-blue-600">Total Issues</div>
                         </div>
                       </div>
-                      
-                      {urgentActions.length > 0 && (
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-orange-800">Immediate Actions Required:</h4>
-                          {urgentActions.slice(0, 3).map((hazard, index) => (
-                            <div key={index} className="flex items-center gap-2 p-2 bg-white rounded border-l-4 border-red-500">
-                              <AlertTriangle className="h-4 w-4 text-red-500" />
-                              <span className="text-sm">
-                                <strong>{hazard.label.split(" - ")[0]}:</strong> {hazard.mitigation_summary}
-                              </span>
-                            </div>
-                          ))}
-                          {urgentActions.length > 3 && (
-                            <p className="text-sm text-orange-600">
-                              + {urgentActions.length - 3} more urgent actions (see detailed analysis below)
-                            </p>
-                          )}
-                        </div>
-                      )}
                     </CardContent>
                   </Card>
                 ) : null
@@ -285,72 +269,11 @@ export default function ResultsPage() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <h4 className="font-semibold text-card-foreground">Frame Analysis</h4>
-                                {results.frames[index].boundingBoxes && results.frames[index].boundingBoxes.length > 0 && (
-                                  <Badge variant="outline">
-                                    {results.frames[index].boundingBoxes.length} annotation(s)
-                                  </Badge>
-                                )}
                               </div>
                               <AnnotatedImage
                                 src={results.frames[index].imageUrl}
                                 alt={`Frame at ${frameDetail.timestamp}`}
-                                boundingBoxes={results.frames[index].boundingBoxes || []}
                               />
-                              {results.frames[index].boundingBoxes && results.frames[index].boundingBoxes.length > 0 && (
-                                <div className="space-y-3">
-                                  <h5 className="font-medium text-foreground">Detected Safety Issues:</h5>
-                                  {results.frames[index].boundingBoxes.map((box: any, boxIndex: number) => (
-                                    <div key={boxIndex} className="border rounded-lg p-3 space-y-2">
-                                      <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                          <div className={`w-3 h-3 rounded-sm ${
-                                            box.severity === 'critical' ? 'bg-red-500' :
-                                            box.severity === 'high' ? 'bg-orange-500' :
-                                            box.severity === 'medium' ? 'bg-yellow-500' :
-                                            'bg-green-500'
-                                          }`}></div>
-                                          <span className="font-medium capitalize">{box.label.split(" - ")[0]}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                          <Badge variant={
-                                            box.severity === 'critical' ? 'destructive' :
-                                            box.severity === 'high' ? 'secondary' :
-                                            'outline'
-                                          }>
-                                            {box.severity?.toUpperCase() || 'UNKNOWN'}
-                                          </Badge>
-                                          {box.immediate_action && (
-                                            <Badge variant="default" className="bg-yellow-500 text-black">
-                                              URGENT
-                                            </Badge>
-                                          )}
-                                        </div>
-                                      </div>
-                                      
-                                      {box.reason && (
-                                        <p className="text-sm text-muted-foreground">
-                                          <strong>Issue:</strong> {box.reason}
-                                        </p>
-                                      )}
-                                      
-                                      {box.mitigation_summary && (
-                                        <p className="text-sm text-muted-foreground">
-                                          <strong>Action Required:</strong> {box.mitigation_summary}
-                                        </p>
-                                      )}
-                                      
-                                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                        {box.confidence && (
-                                          <span>Confidence: {(box.confidence * 100).toFixed(1)}%</span>
-                                        )}
-                                        {box.source && (
-                                          <span>Source: {box.source.replace('_', ' ')}</span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
                             </div>
                           )}
 
@@ -411,15 +334,15 @@ export default function ResultsPage() {
                 </Card>
               )}
 
-              {/* Legacy Annotated Images (if no detailed analysis available) */}
+              {/* Frame Images (if no detailed analysis available) */}
               {(!results.frameDetails || results.frameDetails.length === 0) && results.frames && results.frames.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                      Detected Violations
+                      Analysis Frames
                       <Badge variant="outline">{results.frames.length} frame(s)</Badge>
                     </CardTitle>
-                    <CardDescription>Images showing detected safety violations with highlighted areas</CardDescription>
+                    <CardDescription>Images from the safety analysis</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -427,40 +350,11 @@ export default function ResultsPage() {
                         <div key={index} className="space-y-3">
                           <div className="flex items-center justify-between">
                             <h4 className="font-semibold text-card-foreground">Timestamp: {frame.time}</h4>
-                            <Badge variant="outline">{frame.boundingBoxes.length} violation(s)</Badge>
                           </div>
                           <AnnotatedImage
                             src={frame.imageUrl}
                             alt={`Frame at ${frame.time}`}
-                            boundingBoxes={frame.boundingBoxes}
                           />
-                          <div className="space-y-2">
-                            {frame.boundingBoxes.map((box, boxIndex) => (
-                              <div key={boxIndex} className="border rounded-md p-2 space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-sm ${
-                                      box.severity === 'critical' ? 'bg-red-500' :
-                                      box.severity === 'high' ? 'bg-orange-500' :
-                                      box.severity === 'medium' ? 'bg-yellow-500' :
-                                      'bg-green-500'
-                                    }`}></div>
-                                    <span className="text-sm font-medium capitalize">{box.label.split(" - ")[0]}</span>
-                                  </div>
-                                  <Badge variant={
-                                    box.severity === 'critical' ? 'destructive' :
-                                    box.severity === 'high' ? 'secondary' :
-                                    'outline'
-                                  } className="text-xs">
-                                    {box.severity?.toUpperCase() || 'ISSUE'}
-                                  </Badge>
-                                </div>
-                                {box.reason && (
-                                  <p className="text-xs text-muted-foreground">{box.reason}</p>
-                                )}
-                              </div>
-                            ))}
-                          </div>
                         </div>
                       ))}
                     </div>

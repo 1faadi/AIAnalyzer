@@ -1,0 +1,902 @@
+{
+  "videoHash": "4749824672f0e261fd7eec85cb8a9176-56b6bfc3b889b549",
+  "filename": "abc.mp4",
+  "cachedAt": "2025-09-15T10:29:00.144Z",
+  "results": {
+    "incorrectParking": true,
+    "wasteMaterial": true,
+    "explanation": "Comprehensive analysis of 12 unique frames using combined YOLO object detection and AI grid-based analysis (filtered from 202 total frames). Frame 2: A truck is visible at the bottom right corner, which could obstruct pathways if not parked properly.; Frame 3: Trucks parked in a manner that may obstruct emergency vehicle access.; Frame 4: Accumulation of debris in the alleyway.; Frame 5: Scattered debris and waste material.; Frame 6: Debris and rubble scattered across the ground.; Frame 7: Machinery parked along the right side.; Frame 8: Debris and rubble scattered across the ground.; Frame 9: Containers and debris scattered across the area.; Frame 10: Waste materials and debris scattered.; Frame 11: Trucks parked in a manner that obstructs pathways.",
+    "frames": [
+      {
+        "time": "00:00",
+        "imageUrl": "/temp/frame_0_00m00s.jpg",
+        "boundingBoxes": [],
+        "yolo_detections": 1,
+        "ai_issues": 0,
+        "frame_analysis": {
+          "detailed_observations": "The image shows two large warehouse buildings with metal roofs. There are trees and vegetation visible along the bottom edge of the image. The area between the buildings appears clear, with no visible obstructions.",
+          "pathway_clearance": "The pathway between the buildings is clear, with no visible obstructions.",
+          "emergency_access": "Emergency vehicle access appears unobstructed.",
+          "recommended_actions": []
+        }
+      },
+      {
+        "time": "00:01",
+        "imageUrl": "/temp/frame_12_00m14s.jpg",
+        "boundingBoxes": [],
+        "yolo_detections": 0,
+        "ai_issues": 0,
+        "frame_analysis": {
+          "detailed_observations": "This frame shows a continuation of the warehouse rooftops. There is a narrow pathway between the buildings, which appears clear. Trees are visible along the pathway.",
+          "pathway_clearance": "The pathway is narrow but clear, allowing for emergency access.",
+          "emergency_access": "Emergency vehicle access is possible through the clear pathway.",
+          "recommended_actions": []
+        }
+      },
+      {
+        "time": "00:02",
+        "imageUrl": "/temp/frame_14_00m16s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: vehicle: A truck is visible at the bottom right c...",
+            "x": 0.75,
+            "y": 0.6666666666666666,
+            "w": 0.25,
+            "h": 0.3333333333333333,
+            "source": "ai_analysis",
+            "severity": "low",
+            "mitigation": "Ensure the truck is parked in designated areas away from pathways."
+          }
+        ],
+        "yolo_detections": 1,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "The image shows the end of the warehouse buildings with a clear pathway between them. There is a vehicle visible at the bottom right corner.",
+          "pathway_clearance": "The pathway is clear, but the truck's position should be monitored.",
+          "emergency_access": "Emergency access is currently unobstructed, but the truck's position should be checked.",
+          "recommended_actions": [
+            {
+              "action": "Verify the truck is parked in a designated area.",
+              "priority": "medium",
+              "timeframe": "24-hours"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:03",
+        "imageUrl": "/temp/frame_16_00m21s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: parking: Trucks parked in a manner that may obstr...",
+            "x": 0.25,
+            "y": 0.3333333333333333,
+            "w": 0.75,
+            "h": 0.3333333333333333,
+            "source": "ai_analysis",
+            "severity": "medium",
+            "mitigation": "Reorganize parking to ensure clear access paths."
+          }
+        ],
+        "yolo_detections": 9,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "The image shows a row of trucks parked alongside a warehouse. Some trucks are covered with tarps, and there is a visible tree on the right side.",
+          "pathway_clearance": "Pathway appears narrow due to parked trucks.",
+          "emergency_access": "Limited due to vehicle positioning.",
+          "recommended_actions": [
+            {
+              "action": "Reorganize vehicle parking.",
+              "priority": "high",
+              "timeframe": "1-week"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:04",
+        "imageUrl": "/temp/frame_1_00m06s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: debris: Accumulation of debris in the alleyway....",
+            "x": 0.25,
+            "y": 0.3333333333333333,
+            "w": 0.25,
+            "h": 0.3333333333333333,
+            "source": "ai_analysis",
+            "severity": "high",
+            "mitigation": "Clear debris and maintain cleanliness."
+          }
+        ],
+        "yolo_detections": 2,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "A narrow alley between two warehouse buildings with visible debris and vegetation.",
+          "pathway_clearance": "Pathway is obstructed by debris.",
+          "emergency_access": "Severely limited due to debris.",
+          "recommended_actions": [
+            {
+              "action": "Clear debris immediately.",
+              "priority": "high",
+              "timeframe": "24-hours"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:05",
+        "imageUrl": "/temp/frame_23_00m46s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: waste: Scattered debris and waste material....",
+            "x": 0.5,
+            "y": 0.3333333333333333,
+            "w": 0.25,
+            "h": 0.6666666666666666,
+            "source": "ai_analysis",
+            "severity": "high",
+            "mitigation": "Implement regular cleaning schedules."
+          }
+        ],
+        "yolo_detections": 2,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "An overview of a warehouse area with visible machinery, debris, and vegetation.",
+          "pathway_clearance": "Pathways are obstructed by debris.",
+          "emergency_access": "Compromised due to scattered debris.",
+          "recommended_actions": [
+            {
+              "action": "Organize a cleanup operation.",
+              "priority": "high",
+              "timeframe": "1-week"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:06",
+        "imageUrl": "/temp/frame_30_01m00s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: waste: Debris and rubble scattered across the g...",
+            "x": 0,
+            "y": 0,
+            "w": 0.5,
+            "h": 0.6666666666666666,
+            "source": "ai_analysis",
+            "severity": "high",
+            "mitigation": "Clear debris and ensure pathways are unobstructed."
+          }
+        ],
+        "yolo_detections": 1,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "The area is cluttered with debris and construction materials. There is a significant amount of rubble and waste material scattered across the ground. Trees and vegetation are visible, potentially obstructing pathways.",
+          "pathway_clearance": "Pathways are obstructed by debris.",
+          "emergency_access": "Limited due to debris obstruction.",
+          "recommended_actions": [
+            {
+              "action": "Remove debris and clear pathways.",
+              "priority": "high",
+              "timeframe": "immediate"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:07",
+        "imageUrl": "/temp/frame_39_00m41s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: obstruction: Machinery parked along the right side....",
+            "x": 0.5,
+            "y": 0.3333333333333333,
+            "w": 0.5,
+            "h": 0.6666666666666666,
+            "source": "ai_analysis",
+            "severity": "medium",
+            "mitigation": "Reorganize equipment to ensure clear pathways."
+          }
+        ],
+        "yolo_detections": 7,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "Heavy machinery and equipment are parked along the right side. Debris is still visible on the left side. The area appears congested with equipment.",
+          "pathway_clearance": "Pathways are partially obstructed by machinery.",
+          "emergency_access": "Limited due to machinery placement.",
+          "recommended_actions": [
+            {
+              "action": "Reorganize machinery to clear pathways.",
+              "priority": "medium",
+              "timeframe": "24-hours"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:08",
+        "imageUrl": "/temp/frame_40_00m42s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: waste: Debris and rubble scattered across the g...",
+            "x": 0,
+            "y": 0,
+            "w": 0.25,
+            "h": 0.6666666666666666,
+            "source": "ai_analysis",
+            "severity": "high",
+            "mitigation": "Clear debris and ensure pathways are unobstructed."
+          }
+        ],
+        "yolo_detections": 7,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "Similar to frame 7, with heavy machinery and debris visible. The area remains congested with equipment.",
+          "pathway_clearance": "Pathways are obstructed by debris and machinery.",
+          "emergency_access": "Limited due to debris and machinery.",
+          "recommended_actions": [
+            {
+              "action": "Remove debris and reorganize machinery.",
+              "priority": "high",
+              "timeframe": "immediate"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:09",
+        "imageUrl": "/temp/frame_50_00m52s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: obstruction: Containers and debris scattered across t...",
+            "x": 0,
+            "y": 0,
+            "w": 0.5,
+            "h": 0.6666666666666666,
+            "source": "ai_analysis",
+            "severity": "high",
+            "mitigation": "Clear debris and organize containers to ensure clear pathways."
+          }
+        ],
+        "yolo_detections": 5,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "The image shows an industrial area with multiple structures and vehicles. There are several large containers and scattered debris visible.",
+          "pathway_clearance": "Pathways are partially obstructed by containers and debris.",
+          "emergency_access": "Limited due to obstructions.",
+          "recommended_actions": [
+            {
+              "action": "Clear debris and organize containers.",
+              "priority": "high",
+              "timeframe": "immediate"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:10",
+        "imageUrl": "/temp/frame_61_01m11s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: waste: Waste materials and debris scattered....",
+            "x": 0,
+            "y": 0.3333333333333333,
+            "w": 0.5,
+            "h": 0.3333333333333333,
+            "source": "ai_analysis",
+            "severity": "medium",
+            "mitigation": "Remove waste materials and ensure proper disposal."
+          }
+        ],
+        "yolo_detections": 6,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "The image shows a closer view of the industrial area with containers and debris. There are also some large cylindrical objects.",
+          "pathway_clearance": "Pathways are partially blocked by waste materials.",
+          "emergency_access": "Restricted due to waste accumulation.",
+          "recommended_actions": [
+            {
+              "action": "Remove waste materials.",
+              "priority": "medium",
+              "timeframe": "24-hours"
+            }
+          ]
+        }
+      },
+      {
+        "time": "00:11",
+        "imageUrl": "/temp/frame_6_00m34s.jpg",
+        "boundingBoxes": [
+          {
+            "label": "AI: parking: Trucks parked in a manner that obstructs...",
+            "x": 0.5,
+            "y": 0.6666666666666666,
+            "w": 0.5,
+            "h": 0.3333333333333333,
+            "source": "ai_analysis",
+            "severity": "high",
+            "mitigation": "Reorganize parking to ensure clear access."
+          },
+          {
+            "label": "Truck - CRITICAL",
+            "x": 0.7173260688781739,
+            "y": 0.39250914255777997,
+            "w": 0.10139923095703125,
+            "h": 0.332165781656901,
+            "source": "yolo_detection",
+            "confidence": 0.20084300637245178,
+            "safety_category": "vehicle",
+            "severity": "critical",
+            "reason": "Vehicle blocking emergency access",
+            "priority": 1,
+            "immediate_action": true,
+            "hazard_type": "pathway_obstruction",
+            "mitigation_summary": "Remove truck from pathway immediately"
+          },
+          {
+            "label": "Truck - CRITICAL",
+            "x": 0.39451017379760744,
+            "y": 0.47553771336873374,
+            "w": 0.29982728958129884,
+            "h": 0.49612277348836265,
+            "source": "yolo_detection",
+            "confidence": 0.38963791728019714,
+            "safety_category": "vehicle",
+            "severity": "critical",
+            "reason": "Vehicle blocking emergency access",
+            "priority": 1,
+            "immediate_action": true,
+            "hazard_type": "pathway_obstruction",
+            "mitigation_summary": "Remove truck from pathway immediately"
+          }
+        ],
+        "yolo_detections": 15,
+        "ai_issues": 1,
+        "frame_analysis": {
+          "detailed_observations": "The image shows a broader view of the industrial area with multiple vehicles and equipment. There are several parked trucks and machinery.",
+          "pathway_clearance": "Pathways are obstructed by improperly parked vehicles.",
+          "emergency_access": "Severely restricted due to parking issues.",
+          "recommended_actions": [
+            {
+              "action": "Reorganize vehicle parking.",
+              "priority": "high",
+              "timeframe": "immediate"
+            }
+          ]
+        }
+      }
+    ],
+    "frameDetails": [
+      {
+        "frameIndex": 0,
+        "timestamp": "00:00",
+        "detailedObservations": "The image shows two large warehouse buildings with metal roofs. There are trees and vegetation visible along the bottom edge of the image. The area between the buildings appears clear, with no visible obstructions.",
+        "identifiedObjects": [
+          {
+            "objectType": "potted plant",
+            "location": "C1",
+            "safetyRelevance": "No direct impact on safety",
+            "confidence": "low"
+          }
+        ],
+        "safetyIssues": [],
+        "pathwayClearance": "The pathway between the buildings is clear, with no visible obstructions.",
+        "emergencyAccess": "Emergency vehicle access appears unobstructed.",
+        "recommendedActions": []
+      },
+      {
+        "frameIndex": 1,
+        "timestamp": "00:01",
+        "detailedObservations": "This frame shows a continuation of the warehouse rooftops. There is a narrow pathway between the buildings, which appears clear. Trees are visible along the pathway.",
+        "identifiedObjects": [],
+        "safetyIssues": [],
+        "pathwayClearance": "The pathway is narrow but clear, allowing for emergency access.",
+        "emergencyAccess": "Emergency vehicle access is possible through the clear pathway.",
+        "recommendedActions": []
+      },
+      {
+        "frameIndex": 2,
+        "timestamp": "00:02",
+        "detailedObservations": "The image shows the end of the warehouse buildings with a clear pathway between them. There is a vehicle visible at the bottom right corner.",
+        "identifiedObjects": [
+          {
+            "objectType": "truck",
+            "location": "C4",
+            "safetyRelevance": "Potential obstruction if parked incorrectly",
+            "confidence": "medium"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "vehicle",
+            "severity": "low",
+            "confidence": 5,
+            "reasoning": "The truck is parked at the edge of the frame, which could potentially obstruct emergency access if not parked correctly.",
+            "description": "A truck is visible at the bottom right corner, which could obstruct pathways if not parked properly.",
+            "location": "bottom right corner",
+            "impact": "Could hinder emergency vehicle access if parked incorrectly.",
+            "gridCells": "C4",
+            "mitigationStrategy": "Ensure the truck is parked in designated areas away from pathways.",
+            "urgency": "short-term",
+            "estimatedCost": "low",
+            "responsibleParty": "Warehouse management"
+          }
+        ],
+        "pathwayClearance": "The pathway is clear, but the truck's position should be monitored.",
+        "emergencyAccess": "Emergency access is currently unobstructed, but the truck's position should be checked.",
+        "recommendedActions": [
+          {
+            "action": "Verify the truck is parked in a designated area.",
+            "priority": "medium",
+            "timeframe": "24-hours"
+          }
+        ]
+      },
+      {
+        "frameIndex": 3,
+        "timestamp": "00:03",
+        "detailedObservations": "The image shows a row of trucks parked alongside a warehouse. Some trucks are covered with tarps, and there is a visible tree on the right side.",
+        "identifiedObjects": [
+          {
+            "objectType": "truck",
+            "location": "B2-B4",
+            "safetyRelevance": "Potential obstruction to emergency pathways",
+            "confidence": "high"
+          },
+          {
+            "objectType": "tree",
+            "location": "C4",
+            "safetyRelevance": "Could obstruct visibility or access",
+            "confidence": "medium"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "parking",
+            "severity": "medium",
+            "confidence": 8,
+            "reasoning": "Trucks are parked closely together, potentially blocking emergency access.",
+            "description": "Trucks parked in a manner that may obstruct emergency vehicle access.",
+            "location": "right side",
+            "impact": "Could delay emergency response times.",
+            "gridCells": "B2-B4",
+            "mitigationStrategy": "Reorganize parking to ensure clear access paths.",
+            "urgency": "short-term",
+            "estimatedCost": "low",
+            "responsibleParty": "warehouse management"
+          }
+        ],
+        "pathwayClearance": "Pathway appears narrow due to parked trucks.",
+        "emergencyAccess": "Limited due to vehicle positioning.",
+        "recommendedActions": [
+          {
+            "action": "Reorganize vehicle parking.",
+            "priority": "high",
+            "timeframe": "1-week"
+          }
+        ]
+      },
+      {
+        "frameIndex": 4,
+        "timestamp": "00:04",
+        "detailedObservations": "A narrow alley between two warehouse buildings with visible debris and vegetation.",
+        "identifiedObjects": [
+          {
+            "objectType": "debris",
+            "location": "B2",
+            "safetyRelevance": "Trip hazard and obstruction",
+            "confidence": "high"
+          },
+          {
+            "objectType": "vegetation",
+            "location": "B3",
+            "safetyRelevance": "Potential obstruction",
+            "confidence": "medium"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "debris",
+            "severity": "high",
+            "confidence": 9,
+            "reasoning": "Debris in the alleyway could obstruct emergency access and pose trip hazards.",
+            "description": "Accumulation of debris in the alleyway.",
+            "location": "center",
+            "impact": "Could hinder emergency personnel movement.",
+            "gridCells": "B2",
+            "mitigationStrategy": "Clear debris and maintain cleanliness.",
+            "urgency": "immediate",
+            "estimatedCost": "low",
+            "responsibleParty": "maintenance team"
+          }
+        ],
+        "pathwayClearance": "Pathway is obstructed by debris.",
+        "emergencyAccess": "Severely limited due to debris.",
+        "recommendedActions": [
+          {
+            "action": "Clear debris immediately.",
+            "priority": "high",
+            "timeframe": "24-hours"
+          }
+        ]
+      },
+      {
+        "frameIndex": 5,
+        "timestamp": "00:05",
+        "detailedObservations": "An overview of a warehouse area with visible machinery, debris, and vegetation.",
+        "identifiedObjects": [
+          {
+            "objectType": "machinery",
+            "location": "A1-B2",
+            "safetyRelevance": "Potential obstruction",
+            "confidence": "medium"
+          },
+          {
+            "objectType": "debris",
+            "location": "B3-C3",
+            "safetyRelevance": "Trip hazard and obstruction",
+            "confidence": "high"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "waste",
+            "severity": "high",
+            "confidence": 9,
+            "reasoning": "Debris scattered around the area poses trip hazards and obstructs pathways.",
+            "description": "Scattered debris and waste material.",
+            "location": "center",
+            "impact": "Could impede emergency response and personnel movement.",
+            "gridCells": "B3-C3",
+            "mitigationStrategy": "Implement regular cleaning schedules.",
+            "urgency": "immediate",
+            "estimatedCost": "medium",
+            "responsibleParty": "facility management"
+          }
+        ],
+        "pathwayClearance": "Pathways are obstructed by debris.",
+        "emergencyAccess": "Compromised due to scattered debris.",
+        "recommendedActions": [
+          {
+            "action": "Organize a cleanup operation.",
+            "priority": "high",
+            "timeframe": "1-week"
+          }
+        ]
+      },
+      {
+        "frameIndex": 6,
+        "timestamp": "00:06",
+        "detailedObservations": "The area is cluttered with debris and construction materials. There is a significant amount of rubble and waste material scattered across the ground. Trees and vegetation are visible, potentially obstructing pathways.",
+        "identifiedObjects": [
+          {
+            "objectType": "debris",
+            "location": "A1-B2",
+            "safetyRelevance": "Obstructs pathways and creates trip hazards.",
+            "confidence": "high"
+          },
+          {
+            "objectType": "tree",
+            "location": "A3",
+            "safetyRelevance": "Potentially obstructs pathways.",
+            "confidence": "high"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "waste",
+            "severity": "high",
+            "confidence": 9,
+            "reasoning": "The scattered debris poses a significant trip hazard and obstructs emergency pathways.",
+            "description": "Debris and rubble scattered across the ground.",
+            "location": "left side",
+            "impact": "Could impede emergency response and evacuation.",
+            "gridCells": "A1-B2",
+            "mitigationStrategy": "Clear debris and ensure pathways are unobstructed.",
+            "urgency": "immediate",
+            "estimatedCost": "medium",
+            "responsibleParty": "facility management"
+          }
+        ],
+        "pathwayClearance": "Pathways are obstructed by debris.",
+        "emergencyAccess": "Limited due to debris obstruction.",
+        "recommendedActions": [
+          {
+            "action": "Remove debris and clear pathways.",
+            "priority": "high",
+            "timeframe": "immediate"
+          }
+        ]
+      },
+      {
+        "frameIndex": 7,
+        "timestamp": "00:07",
+        "detailedObservations": "Heavy machinery and equipment are parked along the right side. Debris is still visible on the left side. The area appears congested with equipment.",
+        "identifiedObjects": [
+          {
+            "objectType": "heavy machinery",
+            "location": "B3-C4",
+            "safetyRelevance": "Potential obstruction for emergency access.",
+            "confidence": "high"
+          },
+          {
+            "objectType": "debris",
+            "location": "A1-B1",
+            "safetyRelevance": "Obstructs pathways and creates trip hazards.",
+            "confidence": "high"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "obstruction",
+            "severity": "medium",
+            "confidence": 8,
+            "reasoning": "Heavy machinery parked in a way that could obstruct emergency access.",
+            "description": "Machinery parked along the right side.",
+            "location": "right side",
+            "impact": "Could delay emergency response.",
+            "gridCells": "B3-C4",
+            "mitigationStrategy": "Reorganize equipment to ensure clear pathways.",
+            "urgency": "short-term",
+            "estimatedCost": "low",
+            "responsibleParty": "operations team"
+          }
+        ],
+        "pathwayClearance": "Pathways are partially obstructed by machinery.",
+        "emergencyAccess": "Limited due to machinery placement.",
+        "recommendedActions": [
+          {
+            "action": "Reorganize machinery to clear pathways.",
+            "priority": "medium",
+            "timeframe": "24-hours"
+          }
+        ]
+      },
+      {
+        "frameIndex": 8,
+        "timestamp": "00:08",
+        "detailedObservations": "Similar to frame 7, with heavy machinery and debris visible. The area remains congested with equipment.",
+        "identifiedObjects": [
+          {
+            "objectType": "heavy machinery",
+            "location": "B3-C4",
+            "safetyRelevance": "Potential obstruction for emergency access.",
+            "confidence": "high"
+          },
+          {
+            "objectType": "debris",
+            "location": "A1-B1",
+            "safetyRelevance": "Obstructs pathways and creates trip hazards.",
+            "confidence": "high"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "waste",
+            "severity": "high",
+            "confidence": 9,
+            "reasoning": "Debris continues to pose a significant trip hazard and obstructs emergency pathways.",
+            "description": "Debris and rubble scattered across the ground.",
+            "location": "left side",
+            "impact": "Could impede emergency response and evacuation.",
+            "gridCells": "A1-B1",
+            "mitigationStrategy": "Clear debris and ensure pathways are unobstructed.",
+            "urgency": "immediate",
+            "estimatedCost": "medium",
+            "responsibleParty": "facility management"
+          }
+        ],
+        "pathwayClearance": "Pathways are obstructed by debris and machinery.",
+        "emergencyAccess": "Limited due to debris and machinery.",
+        "recommendedActions": [
+          {
+            "action": "Remove debris and reorganize machinery.",
+            "priority": "high",
+            "timeframe": "immediate"
+          }
+        ]
+      },
+      {
+        "frameIndex": 9,
+        "timestamp": "00:09",
+        "detailedObservations": "The image shows an industrial area with multiple structures and vehicles. There are several large containers and scattered debris visible.",
+        "identifiedObjects": [
+          {
+            "objectType": "train",
+            "location": "A1-A2",
+            "safetyRelevance": "Potential obstruction",
+            "confidence": "medium"
+          },
+          {
+            "objectType": "truck",
+            "location": "B1",
+            "safetyRelevance": "Improper parking",
+            "confidence": "medium"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "obstruction",
+            "severity": "high",
+            "confidence": 8,
+            "reasoning": "The presence of large containers and debris can obstruct pathways and emergency access.",
+            "description": "Containers and debris scattered across the area.",
+            "location": "center",
+            "impact": "Could block emergency vehicles and personnel.",
+            "gridCells": "A1-B2",
+            "mitigationStrategy": "Clear debris and organize containers to ensure clear pathways.",
+            "urgency": "immediate",
+            "estimatedCost": "medium",
+            "responsibleParty": "Facility management"
+          }
+        ],
+        "pathwayClearance": "Pathways are partially obstructed by containers and debris.",
+        "emergencyAccess": "Limited due to obstructions.",
+        "recommendedActions": [
+          {
+            "action": "Clear debris and organize containers.",
+            "priority": "high",
+            "timeframe": "immediate"
+          }
+        ]
+      },
+      {
+        "frameIndex": 10,
+        "timestamp": "00:10",
+        "detailedObservations": "The image shows a closer view of the industrial area with containers and debris. There are also some large cylindrical objects.",
+        "identifiedObjects": [
+          {
+            "objectType": "toilet",
+            "location": "B2",
+            "safetyRelevance": "Unrelated object",
+            "confidence": "low"
+          },
+          {
+            "objectType": "truck",
+            "location": "C1",
+            "safetyRelevance": "Improper parking",
+            "confidence": "medium"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "waste",
+            "severity": "medium",
+            "confidence": 7,
+            "reasoning": "Accumulation of waste materials can create hazards and block pathways.",
+            "description": "Waste materials and debris scattered.",
+            "location": "left side",
+            "impact": "Could impede movement and emergency response.",
+            "gridCells": "B1-B2",
+            "mitigationStrategy": "Remove waste materials and ensure proper disposal.",
+            "urgency": "short-term",
+            "estimatedCost": "low",
+            "responsibleParty": "Maintenance team"
+          }
+        ],
+        "pathwayClearance": "Pathways are partially blocked by waste materials.",
+        "emergencyAccess": "Restricted due to waste accumulation.",
+        "recommendedActions": [
+          {
+            "action": "Remove waste materials.",
+            "priority": "medium",
+            "timeframe": "24-hours"
+          }
+        ]
+      },
+      {
+        "frameIndex": 11,
+        "timestamp": "00:11",
+        "detailedObservations": "The image shows a broader view of the industrial area with multiple vehicles and equipment. There are several parked trucks and machinery.",
+        "identifiedObjects": [
+          {
+            "objectType": "bus",
+            "location": "A3",
+            "safetyRelevance": "Potential obstruction",
+            "confidence": "medium"
+          },
+          {
+            "objectType": "truck",
+            "location": "C3",
+            "safetyRelevance": "Improper parking",
+            "confidence": "high"
+          }
+        ],
+        "safetyIssues": [
+          {
+            "type": "parking",
+            "severity": "high",
+            "confidence": 9,
+            "reasoning": "Improperly parked vehicles can block access and create hazards.",
+            "description": "Trucks parked in a manner that obstructs pathways.",
+            "location": "right side",
+            "impact": "Could block emergency vehicles and personnel.",
+            "gridCells": "C3-C4",
+            "mitigationStrategy": "Reorganize parking to ensure clear access.",
+            "urgency": "immediate",
+            "estimatedCost": "low",
+            "responsibleParty": "Logistics team"
+          }
+        ],
+        "pathwayClearance": "Pathways are obstructed by improperly parked vehicles.",
+        "emergencyAccess": "Severely restricted due to parking issues.",
+        "recommendedActions": [
+          {
+            "action": "Reorganize vehicle parking.",
+            "priority": "high",
+            "timeframe": "immediate"
+          }
+        ]
+      }
+    ],
+    "mitigationStrategies": [
+      {
+        "type": "vehicle_parking_violation",
+        "severity": "critical",
+        "urgency": "immediate",
+        "description": "Detected 2 vehicle(s): truck (conf: 0.20), truck (conf: 0.39)",
+        "specific_risks": [
+          "Blocks emergency vehicle access",
+          "Prevents fire brigade movement",
+          "Obstructs evacuation routes",
+          "Creates fire safety violations"
+        ],
+        "mitigation_steps": [
+          "IMMEDIATE: Contact vehicle owners for immediate removal",
+          "IMMEDIATE: Deploy traffic cones to mark violation area",
+          "SHORT-TERM: Install permanent 'No Parking' signage",
+          "SHORT-TERM: Paint red lines on pavement",
+          "LONG-TERM: Install physical barriers (bollards)",
+          "LONG-TERM: Implement automated monitoring system"
+        ],
+        "timeline": "Immediate action required within 30 minutes",
+        "responsible_party": "Security/Facilities Management",
+        "estimated_cost": "Low ($100-500 for signage) to Medium ($2000-5000 for barriers)",
+        "emergency_impact": "Critical - directly blocks emergency vehicle access",
+        "compliance": "Fire safety code violation - immediate remediation required"
+      },
+      {
+        "type": "ai_detected_parking_violation",
+        "severity": "critical",
+        "urgency": "immediate",
+        "description": "AI visual analysis detected parking violations affecting emergency access",
+        "specific_risks": [
+          "Confirmed visual obstruction of emergency routes",
+          "Fire code compliance violation",
+          "Insurance liability issues"
+        ],
+        "mitigation_steps": [
+          "IMMEDIATE: Document violation with photos",
+          "IMMEDIATE: Contact vehicle owners",
+          "SHORT-TERM: Install physical barriers",
+          "LONG-TERM: Implement automated monitoring"
+        ],
+        "timeline": "Immediate action required",
+        "responsible_party": "Security/Management",
+        "estimated_cost": "Medium ($1000-3000 for comprehensive solution)",
+        "emergency_impact": "Critical - confirmed emergency access obstruction"
+      },
+      {
+        "type": "ai_detected_waste_debris",
+        "severity": "medium",
+        "urgency": "immediate",
+        "description": "AI visual analysis detected waste or debris in pathways",
+        "specific_risks": [
+          "Confirmed pathway obstruction",
+          "Slip and trip hazards",
+          "Fire fuel load concerns"
+        ],
+        "mitigation_steps": [
+          "IMMEDIATE: Remove waste and debris",
+          "SHORT-TERM: Increase cleaning frequency",
+          "MEDIUM-TERM: Install additional waste receptacles",
+          "LONG-TERM: Implement waste management protocols"
+        ],
+        "timeline": "Complete cleaning within 2 hours",
+        "responsible_party": "Cleaning/Maintenance Staff",
+        "estimated_cost": "Low ($50-200 for enhanced cleaning)",
+        "emergency_impact": "Medium - creates evacuation hazards"
+      }
+    ]
+  }
+}

@@ -91,12 +91,21 @@ export default function HomePage() {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <Shield className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-2xl font-bold text-card-foreground">Warehouse Safety Inspector</h1>
-              <p className="text-sm text-muted-foreground">Analysis of warehouse safety</p>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <Shield className="h-8 w-8 text-primary" />
+              <div>
+                <h1 className="text-2xl font-bold text-card-foreground">Warehouse Safety Inspector</h1>
+                <p className="text-sm text-muted-foreground">Analysis of warehouse safety</p>
+              </div>
             </div>
+            {/* <Button 
+              variant="outline" 
+              onClick={() => router.push('/cache')}
+              className="hidden sm:flex"
+            >
+              Cache Management
+            </Button> */}
           </div>
         </div>
       </header>

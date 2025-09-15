@@ -181,7 +181,7 @@ export default function ProcessingPage() {
                 <ProcessingStep
                   icon={Brain}
                   title="AI Analysis"
-                  description="Analyzing each frame for safety violations with GPT-4o"
+                  description="Analyzing each frame for safety violations with AI"
                   status={progress >= 100 ? "completed" : progress >= 60 ? "active" : "pending"}
                 />
                 <ProcessingStep

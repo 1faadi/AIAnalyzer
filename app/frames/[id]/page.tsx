@@ -158,7 +158,7 @@ export default function FramesPage() {
                   {isAnalyzing ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Analyzing with GPT-4o...
+                      Analyzing with AI...
                     </>
                   ) : (
                     <>
@@ -238,9 +238,9 @@ export default function FramesPage() {
                 <div className="space-y-2">
                   <h4 className="font-semibold text-card-foreground">Analysis Features:</h4>
                   <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• GPT-4o powered visual inspection</li>
+                    <li>• AI-powered visual inspection</li>
                     <li>• Detailed explanations of findings</li>
-                    <li>• Bounding boxes for detected violations</li>
+                    <li>• Comprehensive safety assessment reports</li>
                   </ul>
                 </div>
               </div>
